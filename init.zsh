@@ -20,9 +20,6 @@ local dumpfile
 zstyle -s ':zim:completion' dumpfile 'dumpfile' || dumpfile="${ZDOTDIR:-${HOME}}/.zcompdump"
 autoload -Uz compinit && compinit -C -d ${dumpfile}
 
-# set any compdefs
-source ${0:h}/compdefs.zsh
-
 
 #
 # zsh options
