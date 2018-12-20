@@ -12,13 +12,10 @@ if [[ ${TERM} == 'dumb' ]]; then
   return 1
 fi
 
-# add the completions to the fpath
-fpath=(${0:h}/external/src ${fpath})
-
 # load and initialize the completion system
-local dumpfile
-zstyle -s ':zim:completion' dumpfile 'dumpfile' || dumpfile="${ZDOTDIR:-${HOME}}/.zcompdump"
-autoload -Uz compinit && compinit -C -d ${dumpfile}
+local zdumpfile
+zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile="${ZDOTDIR:-${HOME}}/.zcompdump"
+autoload -Uz compinit && compinit -C -d ${zdumpfile}
 
 
 #

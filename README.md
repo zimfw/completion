@@ -3,7 +3,8 @@ completion
 
 Enables and configures smart and extensive tab completion.
 
-Completions are sourced from [zsh-completions][zsh-completions].
+Additional completion definitions are available in the [zsh-completions][zsh-completions]
+module. This module must be sourced *after* it.
 
 Settings
 --------
@@ -12,7 +13,7 @@ By default, the configuration is dumped to `${ZDOTDIR:-${HOME}}/.zcompdump`.
 This file is produced to speed up the completion initialization. The file path
 can be customized with the following zstyle:
 
-    zstyle ':zim:completion' dumpfile '/path/to/.zcompdump-custom'
+    zstyle ':zim:completion' dumpfile '/path/to/.zsh_dumpfile'
 
 Zsh options
 -----------
@@ -21,10 +22,5 @@ Zsh options
   * `PATH_DIRS` performs path search even on command names with slashes in them.
   * `NO_CASE_GLOB` makes globbing case insensitive.
   * `NO_LIST_BEEP` doesn't beep on ambiguous completions.
-
-Contributing
-------------
-
-Command completions should be submitted [upstream to zsh-completions][zsh-completions].
 
 [zsh-completions]: https://github.com/zsh-users/zsh-completions
