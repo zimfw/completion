@@ -52,7 +52,7 @@ zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
 zstyle ':completion:*' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
 
 # directories
 if (( ! ${+LS_COLORS} )); then
