@@ -12,10 +12,10 @@ if [[ ${TERM} == 'dumb' ]]; then
   return 1
 fi
 
-# load and initialize the completion system
+# load and initialize the completion system ignoring insecure directories
 local zdumpfile
-zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile="${ZDOTDIR:-${HOME}}/.zcompdump"
-autoload -Uz compinit && compinit -C -d ${zdumpfile}
+zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump"
+autoload -Uz compinit && compinit -i -C -d ${zdumpfile}
 
 
 #
