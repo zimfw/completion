@@ -89,7 +89,9 @@ zstyle ':completion:*:history-words' menu yes
 zstyle ':completion:*:(rm|kill|diff):*' ignore-line other
 zstyle ':completion:*:rm:*' file-patterns '*:all-files'
 
-# If the _my_hosts function is defined, it will be called to add the ssh hosts
-# completion, otherwise _ssh_hosts will fall through and read the ~/.ssh/config
-zstyle -e ':completion:*:*:ssh:*:my-accounts' users-hosts \
-  '[[ -f ${HOME}/.ssh/config && ${key} == hosts ]] && key=my_hosts reply=()'
+# read hosts from /etc/{hosts,ssh/known_hosts} and ~/.ssh/{config,config.d/*}
+zstyle -e ':completion:*:hosts' hosts 'reply=(
+  ${=${=${=${${(f)"$(cat {/etc/ssh/ssh_,~/.ssh/}known_hosts(|2)(N) 2> /dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
+  ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2> /dev/null))"}%%(\#${_etc_host_ignores:+|${(j:|:)~_etc_host_ignores}})*}
+  ${=${${${${(@M)${(f)"$(cat ~/.ssh/config ~/.ssh/config.d/* 2> /dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+)' 
