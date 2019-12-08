@@ -15,7 +15,16 @@ fi
 # load and initialize the completion system
 local zdumpfile
 zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile="${ZDOTDIR:-${HOME}}/.zcompdump"
-autoload -Uz compinit && compinit -C -d ${zdumpfile}
+autoload -Uz compinit 
+# with a cache time of 20 hours, so it should almost always regenerate the first time a
+# shell is opened each day
+local zdumpfile_cache
+zdumpfile_cache=($zdumpfile(Nmh-20))
+if (( $#zdumpfile_cache )); then
+  compinit -i -C -d ${zdumpfile}
+else
+  compinit -i -d ${zdumpfile}
+fi
 
 
 #
