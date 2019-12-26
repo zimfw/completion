@@ -3,7 +3,7 @@ completion
 
 Enables and configures smart and extensive tab completion.
 
-Additional completion definitions are available in the [zsh-completions][zsh-completions]
+Additional completion definitions are available in the [zsh-completions]
 module. This module must be sourced *after* it.
 
 Settings
