@@ -19,7 +19,6 @@ Zsh options
 -----------
 
   * `ALWAYS_TO_END` moves cursor to end of word if a full completion is inserted.
-  * `PATH_DIRS` performs path search even on command names with slashes in them.
   * `NO_CASE_GLOB` makes globbing case insensitive.
   * `NO_LIST_BEEP` doesn't beep on ambiguous completions.
 
