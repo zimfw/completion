@@ -15,9 +15,6 @@
   # Move cursor to end of word if a full completion is inserted.
   setopt ALWAYS_TO_END
 
-  # Perform path search even on command names with slashes in them.
-  setopt PATH_DIRS
-
   # Make globbing case insensitive.
   setopt NO_CASE_GLOB
 
