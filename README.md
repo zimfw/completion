@@ -15,6 +15,8 @@ can be customized with the following zstyle:
 
     zstyle ':zim:completion' dumpfile '/path/to/.zsh_dumpfile'
 
+Add the zstyle to your `~/.zshrc` before where the module is initialized.
+
 Zsh options
 -----------
 
