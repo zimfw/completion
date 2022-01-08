@@ -2,11 +2,13 @@
 # Completion enhancements
 #
 
-[[ ${TERM} != 'dumb' ]] && () {
+[[ ${TERM} != dumb ]] && () {
   # Load and initialize the completion system
   local zdumpfile
-  zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile="${ZDOTDIR:-${HOME}}/.zcompdump"
+  zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
+  # Compile the completion cache; significant speedup
+  if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
   #
   # Zsh options
