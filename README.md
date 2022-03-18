@@ -9,6 +9,9 @@ your `~/.zshrc` when you use this module.
 Initialize this module *after* all modules that add completion definitions, like
 [zsh-users/zsh-completions] for example.
 
+Many thanks to [Robby Russell](https://github.com/robbyrussell) and
+[Sorin Ionescu](https://github.com/sorin-ionescu) for the original code.
+
 Settings
 --------
 
