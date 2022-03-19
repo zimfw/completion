@@ -68,6 +68,13 @@
   zstyle ':completion:*:history-words' list false
   zstyle ':completion:*:history-words' menu yes
 
+  # Populate hostname completion.
+  zstyle -e ':completion:*:hosts' hosts 'reply=(
+    ${=${=${=${${(f)"$(cat {/etc/ssh/ssh_,~/.ssh/}known_hosts{,2} 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
+    ${=${(f)"$(cat /etc/hosts 2>/dev/null; ypcat hosts 2>/dev/null)"}%%(\#)*}
+    ${=${${${${(@M)${(f)"$(cat ~/.ssh/config{,.d/*(N)} 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+  )'
+
   # Don't complete uninteresting users...
   zstyle ':completion:*:*:*:users' ignored-patterns \
     '_*' adm amanda apache avahi beaglidx bin cacti canna clamav daemon dbus \
@@ -87,9 +94,4 @@
   # Man
   zstyle ':completion:*:manuals' separate-sections true
   zstyle ':completion:*:manuals.(^1*)' insert-sections true
-
-  # If the _my_hosts function is defined, it will be called to add the ssh hosts
-  # completion, otherwise _ssh_hosts will fall through and read the ~/.ssh/config
-  zstyle -e ':completion:*:*:ssh:*:my-accounts' users-hosts \
-    '[[ -f ${HOME}/.ssh/config && ${key} == hosts ]] && key=my_hosts reply=()'
 }
