@@ -28,8 +28,10 @@
   #
 
   # Enable caching
+  local zcachepath
+  zstyle -s ':zim:completion' cache-path 'zcachepath' || zcachepath=${ZDOTDIR:-${HOME}}/.zcompcache
   zstyle ':completion::complete:*' use-cache on
-  zstyle ':completion::complete:*' cache-path "${ZDOTDIR:-${HOME}}/.zcompcache"
+  zstyle ':completion::complete:*' cache-path ${zcachepath}
 
   # Group matches and describe.
   zstyle ':completion:*:*:*:*:*' menu select

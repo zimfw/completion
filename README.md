@@ -19,9 +19,18 @@ By default, the completion configuration is dumped to `${ZDOTDIR:-${HOME}}/.zcom
 This file is produced to speed up the completion initialization. The file path
 can be customized with the following zstyle:
 
-    zstyle ':zim:completion' dumpfile '/path/to/.zsh_dumpfile'
+    zstyle ':zim:completion' dumpfile '/path/to/zsh_dumpfile'
 
-Add the zstyle to your `~/.zshrc` before where the modules are initialized.
+The completion cache is stored in the `${ZDOTDIR:-${HOME}}/.zcompcache` directory
+by default. This path can be customized to a proper cache directory with:
+
+    zstyle ':zim:completion' cache-path ${XDG_CACHE_HOME}/zsh/zcompcache
+
+or
+
+    zstyle ':zim:completion' cache-path ~/.cache/zsh/zcompcache
+
+Add the zstyles to your `~/.zshrc` before where the modules are initialized.
 
 Zsh options
 -----------
