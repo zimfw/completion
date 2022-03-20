@@ -24,11 +24,11 @@ can be customized with the following zstyle:
 The completion cache is stored in the `${ZDOTDIR:-${HOME}}/.zcompcache` directory
 by default. This path can be customized to a proper cache directory with:
 
-    zstyle ':zim:completion' cache-path ${XDG_CACHE_HOME}/zsh/zcompcache
+    zstyle ':completion::complete:*' cache-path ${XDG_CACHE_HOME}/zsh/zcompcache
 
 or
 
-    zstyle ':zim:completion' cache-path ~/.cache/zsh/zcompcache
+    zstyle ':completion::complete:*' cache-path ~/.cache/zsh/zcompcache
 
 Add the zstyles to your `~/.zshrc` before where the modules are initialized.
 

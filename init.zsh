@@ -7,7 +7,7 @@
   local zdumpfile
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
-  # Compile the completion cache; significant speedup
+  # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
   #
@@ -28,10 +28,7 @@
   #
 
   # Enable caching
-  local zcachepath
-  zstyle -s ':zim:completion' cache-path 'zcachepath' || zcachepath=${ZDOTDIR:-${HOME}}/.zcompcache
   zstyle ':completion::complete:*' use-cache on
-  zstyle ':completion::complete:*' cache-path ${zcachepath}
 
   # Group matches and describe.
   zstyle ':completion:*:*:*:*:*' menu select
