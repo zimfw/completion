@@ -32,6 +32,12 @@ or
 
 Add the zstyles to your `~/.zshrc` before where the modules are initialized.
 
+By default, completion matches are case insensitive. If you would like matching to be case **sensitive**, you can enable that with:
+
+    zstyle ':zim:completion' case-sensitive yes
+
+With this option enabled, `CASE_GLOB` zsh option is set and completion matching with only match the opposite case if there are no options with the supplied case.
+
 Zsh options
 -----------
 

@@ -17,8 +17,13 @@
   # Move cursor to end of word if a full completion is inserted.
   setopt ALWAYS_TO_END
 
-  # Make globbing case insensitive.
-  setopt NO_CASE_GLOB
+  if zstyle -t ':zim:completion' case-sensitive; then
+    # Make globbing case sensitive.
+    setopt CASE_GLOB
+  else
+    # Make globbing case insensitive.
+    setopt NO_CASE_GLOB
+  fi
 
   # Don't beep on ambiguous completions.
   setopt NO_LIST_BEEP
@@ -42,7 +47,11 @@
   zstyle ':completion:*' format '%F{yellow}-- %d --%f'
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*' verbose yes
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+  if zstyle -t ':zim:completion' case-sensitive; then
+    zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+  else
+    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+  fi
 
   # Ignore useless commands and functions
   zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec)|prompt_*)'
