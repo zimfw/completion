@@ -10,6 +10,11 @@
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
+  # Set variables for case sensitivity
+  local glob_case_sensitivity
+  zstyle -s ':zim:case:glob' sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
+  local matcher_case_sensitivity
+  zstyle -s ':zim:case:matcher' sensitivity matcher_case_sensitivity || matcher_case_sensitivity=insensitive
   #
   # Zsh options
   #
@@ -17,12 +22,12 @@
   # Move cursor to end of word if a full completion is inserted.
   setopt ALWAYS_TO_END
 
-  if zstyle -t ':zim:completion' case-sensitive; then
-    # Make globbing case sensitive.
-    setopt CASE_GLOB
-  else
+  if [[ $glob_case_sensitivity == "insensitive" ]]; then
     # Make globbing case insensitive.
     setopt NO_CASE_GLOB
+  else
+    # Make globbing case sensitive.
+    setopt CASE_GLOB
   fi
 
   # Don't beep on ambiguous completions.
@@ -47,9 +52,9 @@
   zstyle ':completion:*' format '%F{yellow}-- %d --%f'
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*' verbose yes
-  if zstyle -t ':zim:completion' case-sensitive; then
+  if [[ $matcher_case_sensitivity == "smart" ]]; then
     zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
-  else
+  elif [[ $matcher_case_sensitivity == "insensitive" ]]; then
     zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
   fi
 

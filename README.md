@@ -32,11 +32,18 @@ or
 
 Add the zstyles to your `~/.zshrc` before where the modules are initialized.
 
-By default, completion matches are case insensitive. If you would like matching to be case **sensitive**, you can enable that with:
+You can also configure case sensitivity for completions and globs together or separately by using the ':zim:case:*' zstyle.
+- insensitive is the default and how zimfw has worked up until now.
+  - `zstyle ':zim:case:*' sensitivity insensitive`
+- sensitive flips `NO_CASE_GLOB` to `CASE_GLOB` and eliminates the completion `matcher-list` that makes completion matches case insensitive.
+  - `zstyle ':zim:case:*' sensitivity sensitive`
+- smart also sets `CASE_GLOB` but instead modifies the `matcher-list` to first match the supplied case and then try being case insensitive if no initial match was found.
+  - `zstyle ':zim:case:*' sensitivity smart`
 
-    zstyle ':zim:completion' case-sensitive yes
+You can also specifically set case sensitivity for glob or matcher-list individually if you want them different. For example:
 
-With this option enabled, `CASE_GLOB` zsh option is set and completion matching with only match the opposite case if there are no options with the supplied case.
+    zstyle ':zim:case:matcher' sensitivity smart
+    zstyle ':zim:case:glob' sensitivity sensitive
 
 Zsh options
 -----------
