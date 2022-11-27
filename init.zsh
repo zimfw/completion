@@ -47,11 +47,19 @@
   zstyle ':completion:*' format '%F{yellow}-- %d --%f'
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*' verbose yes
-  if [[ ${completion_case_sensitivity} == sensitive ]]; then
-    zstyle ':completion:*' matcher-list 'r:|?=**'
-  else
-    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
-  fi
+  case $completion_case_sensitivity in
+    sensitive)
+      # Leave case as-is, but also try within words.
+      zstyle ':completion:*' matcher-list 'r:|?=**'
+      ;;
+    smart)
+      # try as-is, then try within words, then try toggled case, then try within words again (with toggled case)
+      zstyle ':completion:*' matcher-list '' '+r:|?=**' 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+      ;;
+    *)
+      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+      ;;
+  esac
 
   # Ignore useless commands and functions
   zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec)|prompt_*)'
