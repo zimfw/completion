@@ -30,26 +30,27 @@ or
 
     zstyle ':completion::complete:*' cache-path ~/.cache/zsh/zcompcache
 
+You can also configure case sensitivity for completions and globbing by using
+zstyle as described below. By default, case is insensitive. To set just
+completions to be case sensitive, use:
+
+    zstyle ':zim:completion' case-sensitivity sensitive
+
+To set just globbing to be case sensitive, use:
+
+    zstyle ':zim:glob' case-sensitivity sensitive
+
+To set both to be case sensitive, use:
+
+    zstyle ':zim:*' case-sensitivity sensitive
+
 Add the zstyles to your `~/.zshrc` before where the modules are initialized.
-
-You can also configure case sensitivity for completions and globs together or separately by using the ':zim:case:*' zstyle.
-- insensitive is the default and how zimfw has worked up until now.
-  - `zstyle ':zim:case:*' sensitivity insensitive`
-- sensitive flips `NO_CASE_GLOB` to `CASE_GLOB` and eliminates the completion `matcher-list` that makes completion matches case insensitive.
-  - `zstyle ':zim:case:*' sensitivity sensitive`
-- smart also sets `CASE_GLOB` but instead modifies the `matcher-list` to first match the supplied case and then try being case insensitive if no initial match was found.
-  - `zstyle ':zim:case:*' sensitivity smart`
-
-You can also specifically set case sensitivity for glob or matcher-list individually if you want them different. For example:
-
-    zstyle ':zim:case:matcher' sensitivity smart
-    zstyle ':zim:case:glob' sensitivity sensitive
 
 Zsh options
 -----------
 
   * `ALWAYS_TO_END` moves cursor to end of word if a full completion is inserted.
-  * `NO_CASE_GLOB` makes globbing case insensitive.
+  * `NO_CASE_GLOB` makes globbing case insensitive (unless configured as above).
   * `NO_LIST_BEEP` doesn't beep on ambiguous completions.
 
 [zsh-users/zsh-completions]: https://github.com/zsh-users/zsh-completions
