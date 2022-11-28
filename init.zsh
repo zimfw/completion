@@ -48,7 +48,7 @@
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*' verbose yes
   if [[ ${completion_case_sensitivity} == sensitive ]]; then
-    zstyle ':completion:*' matcher-list 'r:|?=**'
+    zstyle ':completion:*' matcher-list '' 'r:|?=**'
   else
     zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
   fi
