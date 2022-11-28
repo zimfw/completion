@@ -44,7 +44,6 @@ To set both to be case sensitive, use:
 
     zstyle ':zim:*' case-sensitivity sensitive
 
-Completion `case-sensitivity` can also be set to `smart`, which means it will try to match the provided case and then try being case insensitive.
 Add the zstyles to your `~/.zshrc` before where the modules are initialized.
 
 Zsh options
