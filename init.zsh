@@ -4,8 +4,10 @@
 
 [[ ${TERM} != dumb ]] && () {
   # Load and initialize the completion system
-  local zdumpfile
+  local zdumpfile glob_case_sensitivity completion_case_sensitivity
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
+  zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
+  zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
@@ -17,8 +19,11 @@
   # Move cursor to end of word if a full completion is inserted.
   setopt ALWAYS_TO_END
 
-  # Make globbing case insensitive.
-  setopt NO_CASE_GLOB
+  if [[ ${glob_case_sensitivity} == sensitive ]]; then
+    setopt CASE_GLOB
+  else
+    setopt NO_CASE_GLOB
+  fi
 
   # Don't beep on ambiguous completions.
   setopt NO_LIST_BEEP
@@ -42,7 +47,11 @@
   zstyle ':completion:*' format '%F{yellow}-- %d --%f'
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*' verbose yes
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+  if [[ ${completion_case_sensitivity} == sensitive ]]; then
+    zstyle ':completion:*' matcher-list '' 'r:|?=**'
+  else
+    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+  fi
 
   # Ignore useless commands and functions
   zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec)|prompt_*)'

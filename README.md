@@ -30,13 +30,27 @@ or
 
     zstyle ':completion::complete:*' cache-path ~/.cache/zsh/zcompcache
 
+You can also configure case sensitivity for completions and globbing by using
+zstyle as described below. By default, case is insensitive. To set just
+completions to be case sensitive, use:
+
+    zstyle ':zim:completion' case-sensitivity sensitive
+
+To set just globbing to be case sensitive, use:
+
+    zstyle ':zim:glob' case-sensitivity sensitive
+
+To set both to be case sensitive, use:
+
+    zstyle ':zim:*' case-sensitivity sensitive
+
 Add the zstyles to your `~/.zshrc` before where the modules are initialized.
 
 Zsh options
 -----------
 
   * `ALWAYS_TO_END` moves cursor to end of word if a full completion is inserted.
-  * `NO_CASE_GLOB` makes globbing case insensitive.
+  * `NO_CASE_GLOB` makes globbing case insensitive (unless configured as above).
   * `NO_LIST_BEEP` doesn't beep on ambiguous completions.
 
 [zsh-users/zsh-completions]: https://github.com/zsh-users/zsh-completions
