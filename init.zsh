@@ -8,6 +8,7 @@
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
   zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
+  typeset -gr _zim_dumpfile_fpath=(${fpath})
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
@@ -91,7 +92,7 @@
     rpm shutdown squid sshd sync uucp vcsa xfs
 
   # ... unless we really want to.
-  zstyle '*' single-ignored show
+  zstyle ':completion:*' single-ignored show
 
   # Ignore multiple entries.
   zstyle ':completion:*:(rm|kill|diff):*' ignore-line other
