@@ -8,8 +8,7 @@
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
   zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
-  if (( ! ${+_zim_dumpfile_fpath} )) typeset -gr _zim_dumpfile_fpath=(${fpath})
-  autoload -Uz compinit && compinit -C -d ${zdumpfile}
+  autoload -Uz compinit && compinit -d ${zdumpfile}
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
