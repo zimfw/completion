@@ -4,12 +4,32 @@
 
 [[ ${TERM} != dumb ]] && () {
   # Load and initialize the completion system
-  local zdumpfile glob_case_sensitivity completion_case_sensitivity
+  local zdumpfile glob_case_sensitivity completion_case_sensitivity zstats zold_dat
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
   zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
-  if (( ! ${+_zim_dumpfile_fpath} )) typeset -gr _zim_dumpfile_fpath=(${fpath})
+
+  # Check if dumpfile is up-to-date by comparing the full path and
+  # last modification time of all the completion functions in fpath.
+  local -i zdump_dat=1
+  local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
+  if (( ${#zcomps} )); then
+    zmodload -F zsh/stat b:zstat
+    zstat -A zstats +mtime ${zcomps}
+  fi
+  local -r znew_dat=${ZSH_VERSION}$'\0'${(pj:\0:)zcomps}$'\0'${(pj:\0:)zstats}
+  if [[ -e ${zdumpfile}.dat ]]; then
+    zmodload -F zsh/system b:sysread
+    sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat
+    [[ ${zold_dat} == ${znew_dat} ]]; zdump_dat=${?}
+  fi
+  if (( zdump_dat )) command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N)
+
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
+
+  if [[ ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
+    >! ${zdumpfile}.dat <<<${znew_dat}
+  fi
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
