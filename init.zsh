@@ -8,8 +8,30 @@
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
   zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
-  if (( ! ${+_zim_dumpfile_fpath} )) typeset -gr _zim_dumpfile_fpath=(${fpath})
+
+  local -r znew_fpath=${(pj:\0:)fpath}
+  local zold_fpath
+  local -i zdump_dat=1
+  if [[ -e ${zdumpfile}.dat ]]; then
+    zmodload -F zsh/system b:sysread
+    sysread -s ${#znew_fpath} zold_fpath <${zdumpfile}.dat
+    [[ ${zold_fpath} == ${znew_fpath} ]]; zdump_dat=${?}
+  fi
+  if (( zdump_dat )) command rm -f ${zdumpfile}
+
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
+
+  if [[ ${zdump_dat} -ne 0 || ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
+    local zstats znew_dat
+    local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
+    if (( ${#zcomps} )); then
+      zmodload -F zsh/stat b:zstat
+      zstat -A zstats +mtime ${zcomps}
+    fi
+    znew_dat=(${ZSH_VERSION} ${zcomps} ${zstats})
+    znew_dat=${(pj:\0:)znew_dat}
+    >! ${zdumpfile}.dat <<<${znew_fpath}$'\n'${znew_dat}
+  fi
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
