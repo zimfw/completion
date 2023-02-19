@@ -22,11 +22,11 @@
     sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat
     [[ ${zold_dat} == ${znew_dat} ]]; zdump_dat=${?}
   fi
-  if (( zdump_dat )) command rm -f ${zdumpfile}
+  if (( zdump_dat )) command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N)
 
   autoload -Uz compinit && compinit -C -d ${zdumpfile}
 
-  if [[ ${zdump_dat} -ne 0 || ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
+  if [[ ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
     >! ${zdumpfile}.dat <<<${znew_dat}
   fi
   # Compile the completion dumpfile; significant speedup
