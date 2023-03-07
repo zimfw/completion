@@ -12,7 +12,7 @@
   # Check if dumpfile is up-to-date by comparing the full path and
   # last modification time of all the completion functions in fpath.
   local -i zdump_dat=1
-  local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
+  LC_ALL=C local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
   if (( ${#zcomps} )); then
     zmodload -F zsh/stat b:zstat
     zstat -A zstats +mtime ${zcomps}
