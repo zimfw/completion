@@ -21,7 +21,7 @@
   if [[ -e ${zdumpfile}.dat ]]; then
     zmodload -F zsh/system b:sysread
     sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat
-    [[ ${zold_dat} == ${znew_dat} ]]; zdump_dat=${?}
+    if [[ ${zold_dat} == ${znew_dat} ]] zdump_dat=0
   fi
   if (( zdump_dat )) command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N)
 
@@ -98,7 +98,7 @@
   # Populate hostname completion.
   zstyle -e ':completion:*:hosts' hosts 'reply=(
     ${=${=${=${${(f)"$(cat {/etc/ssh/ssh_,~/.ssh/}known_hosts{,2} 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
-    ${=${(f)"$(cat /etc/hosts 2>/dev/null; ypcat hosts 2>/dev/null)"}%%(\#)*}
+    ${=${(f)"$(cat /etc/hosts 2>/dev/null; (( ${+commands[ypcat]} )) && ypcat hosts 2>/dev/null)"}%%(\#)*}
     ${=${${${${(@M)${(f)"$(cat ~/.ssh/config{,.d/*(N)} 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
   )'
 
