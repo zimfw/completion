@@ -9,6 +9,15 @@
   zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
   zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
 
+  # Glob expressions in this script require EXTENDED_GLOB option.
+  # Set it if it wasn't set and record previous state, so we
+  # can restore it later.
+  local -i extendedglob=1
+  if [[ ! -o EXTENDED_GLOB ]]; then
+    extendedglob=0
+    setopt EXTENDED_GLOB
+  fi
+
   # Check if dumpfile is up-to-date by comparing the full path and
   # last modification time of all the completion functions in fpath.
   local -i zdump_dat=1
@@ -32,6 +41,10 @@
   fi
   # Compile the completion dumpfile; significant speedup
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
+
+  if (( ! extendedglob )); then
+    unsetopt EXTENDED_GLOB
+  fi
 
   #
   # Zsh options
