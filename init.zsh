@@ -6,19 +6,14 @@ if [[ ${TERM} == dumb ]]; then
   return 1
 fi
 
-# Load and initialize the completion system
-local zdumpfile glob_case_sensitivity completion_case_sensitivity
-zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
-zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
-zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
-
 () {
   builtin emulate -L zsh -o EXTENDED_GLOB
 
   # Check if dumpfile is up-to-date by comparing the full path and
   # last modification time of all the completion functions in fpath.
-  local zstats zold_dat
+  local zdumpfile zstats zold_dat
   local -i zdump_dat=1
+  zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   LC_ALL=C local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
   if (( ${#zcomps} )); then
     zmodload -F zsh/stat b:zstat
@@ -31,19 +26,23 @@ zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || comp
     if [[ ${zold_dat} == ${znew_dat} ]] zdump_dat=0
   fi
   if (( zdump_dat )) command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N)
+
+  # Load and initialize the completion system
+  autoload -Uz compinit && compinit -C -d ${zdumpfile}
+
+  if [[ ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
+    >! ${zdumpfile}.dat <<<${znew_dat}
+  fi
+  # Compile the completion dumpfile; significant speedup
+  if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 }
-
-autoload -Uz compinit && compinit -C -d ${zdumpfile}
-
-if [[ ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
-  >! ${zdumpfile}.dat <<<${znew_dat}
-fi
-# Compile the completion dumpfile; significant speedup
-if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 
 #
 # Zsh options
 #
+local glob_case_sensitivity completion_case_sensitivity
+zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
+zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
 
 # Move cursor to end of word if a full completion is inserted.
 setopt ALWAYS_TO_END
@@ -130,4 +129,4 @@ zstyle ':completion:*:rm:*' file-patterns '*:all-files'
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
-unset zdumpfile glob_case_sensitivity completion_case_sensitivity
+unset glob_case_sensitivity completion_case_sensitivity
