@@ -6,6 +6,10 @@ if [[ ${TERM} == dumb ]]; then
   return 1
 fi
 
+if (( ${+_comps} )); then
+  print -u2 'warning: completion was already initialized before completion module. Look out for compinit calls in other scripts sourced during shell startup. Will call compinit again.'
+fi
+
 () {
   builtin emulate -L zsh -o EXTENDED_GLOB
 
@@ -37,6 +41,10 @@ fi
   if [[ ! ${zdumpfile}.zwc -nt ${zdumpfile} ]] zcompile ${zdumpfile}
 }
 
+functions[compinit]=$'print -u2 \'warning: compinit being called again after completion module at \'${funcfiletrace[1]}
+'${functions[compinit]}
+
+#
 #
 # Zsh options
 #
