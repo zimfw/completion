@@ -7,7 +7,7 @@ if [[ ${TERM} == dumb ]]; then
 fi
 
 if (( ${+_comps} )); then
-  print -u2 'warning: completion was already initialized before completion module. Look out for compinit calls in other scripts sourced during shell startup. Will call compinit again.'
+  print -u2 'warning: completion was already initialized before completion module. Will call compinit again. See https://github.com/zimfw/zimfw/wiki/Troubleshooting#completion-is-not-working'
 fi
 
 () {
