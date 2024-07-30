@@ -89,15 +89,8 @@ else
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
 fi
 
-expand-or-complete-or-list-files() {
-  if [[ -z ${BUFFER} && ${CONTEXT} == start ]]; then
-    BUFFER='\ls ' CURSOR=4 zle list-choices
-  else
-    zle expand-or-complete
-  fi
-}
-zle -N expand-or-complete-or-list-files
-bindkey '^I' expand-or-complete-or-list-files
+# Insert a TAB character instead of performing completion when left buffer is empty.
+zstyle ':completion:*' insert-tab false
 
 # Ignore useless commands and functions
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec)|prompt_*)'
