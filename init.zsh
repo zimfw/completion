@@ -20,19 +20,19 @@ fi
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   LC_ALL=C local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
   if (( ${#zcomps} )); then
-    zmodload -F zsh/stat b:zstat
-    zstat -A zstats +mtime ${zcomps}
+    zmodload -F zsh/stat b:zstat && zstat -A zstats +mtime ${zcomps} || return 1
   fi
   local -r znew_dat=${ZSH_VERSION}$'\0'${(pj:\0:)zcomps}$'\0'${(pj:\0:)zstats}
   if [[ -e ${zdumpfile}.dat ]]; then
-    zmodload -F zsh/system b:sysread
-    sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat
+    zmodload -F zsh/system b:sysread && sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat || return 1
     if [[ ${zold_dat} == ${znew_dat} ]] zdump_dat=0
   fi
-  if (( zdump_dat )) command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N)
+  if (( zdump_dat )); then
+    command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N) || return 1
+  fi
 
   # Load and initialize the completion system
-  autoload -Uz compinit && compinit -C -d ${zdumpfile}
+  autoload -Uz compinit && compinit -C -d ${zdumpfile} || return 1
 
   if [[ ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
     >! ${zdumpfile}.dat <<<${znew_dat}
