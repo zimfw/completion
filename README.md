@@ -49,7 +49,7 @@ To set both to be case sensitive, use:
 
     zstyle ':zim:*' case-sensitivity sensitive
 
-Add the zstyles to your `~/.zshrc` before where the modules are initialized.
+Add the zstyles to your `~/.zshrc` before the modules are initialized.
 
 Zsh options
 -----------
