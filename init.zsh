@@ -87,7 +87,9 @@ zstyle ':completion:*' verbose yes
 if [[ ${completion_case_sensitivity} == sensitive ]]; then
   zstyle ':completion:*' matcher-list '' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 else
-  zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+  # This is actually "smart" case sensitivity. Case insensitive is 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+  # which is broken in Zsh 5.9. See https://www.zsh.org/mla/workers/2022/msg01229.html
+  zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:]}={[:upper:]} r:|[._-]=* r:|=*' 'm:{[:lower:]}={[:upper:]} l:|=* r:|=*'
 fi
 
 # Insert a TAB character instead of performing completion when left buffer is empty.
