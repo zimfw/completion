@@ -56,6 +56,9 @@ zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || comp
 # Move cursor to end of word if a full completion is inserted.
 setopt ALWAYS_TO_END
 
+# Completion is done from both ends of the cursor.
+setopt COMPLETE_IN_WORD
+
 if [[ ${glob_case_sensitivity} == sensitive ]]; then
   setopt CASE_GLOB
 else
@@ -85,11 +88,11 @@ zstyle ':completion:*' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
 if [[ ${completion_case_sensitivity} == sensitive ]]; then
-  zstyle ':completion:*' matcher-list '' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  zstyle ':completion:*' matcher-list '' '+r:|[._-]=* r:|=*' '+l:|=*'
 else
   # This is actually "smart" case sensitivity. Case insensitive is 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
   # which is broken in Zsh 5.9. See https://www.zsh.org/mla/workers/2022/msg01229.html
-  zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:]}={[:upper:]} r:|[._-]=* r:|=*' 'm:{[:lower:]}={[:upper:]} l:|=* r:|=*'
+  zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' '+r:|[._-]=* r:|=*' '+l:|=*'
 fi
 
 # Insert a TAB character instead of performing completion when left buffer is empty.

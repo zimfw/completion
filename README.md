@@ -55,6 +55,7 @@ Zsh options
 -----------
 
   * `ALWAYS_TO_END` moves cursor to end of word if a full completion is inserted.
+  * `COMPLETE_IN_WORD` does completion from both ends for the cursor.
   * `NO_CASE_GLOB` makes globbing case insensitive (unless configured as above).
   * `NO_LIST_BEEP` doesn't beep on ambiguous completions.
 
