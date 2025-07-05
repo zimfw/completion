@@ -76,7 +76,7 @@ setopt NO_LIST_BEEP
 zstyle ':completion::complete:*' use-cache on
 
 # Group matches and describe.
-zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' menu select
 zstyle ':completion:*:matches' group yes
 zstyle ':completion:*:options' description yes
 zstyle ':completion:*:options' auto-description '%d'

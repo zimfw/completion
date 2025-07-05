@@ -1,0 +1,89 @@
+#compdef zimfw
+
+local state ret=1
+_arguments '1:action:->actions' '::option:->options' && ret=0
+
+case ${state} in
+  actions)
+    local actions=(
+      'build:Build init.zsh and login_init.zsh. Also does compile.'
+      'clean:Clean all. Does both clean-compiled and clean-dumpfile.'
+      'clean-compiled:Clean Zsh compiled files'
+      'clean-dumpfile:Clean completion dumpfile'
+      'compile:Compile Zsh files'
+      'info:Print zimfw and system info'
+      'list:List all modules defined in .zimrc'
+      'init:Same as install, but with output tailored for the terminal startup'
+      'install:Install new modules. Also does build, compile.'
+      'update:Update current modules. Also does build, compile.'
+      'reinstall:Reinstall modules that failed check. Also does build, compile.'
+      'uninstall:Delete unused modules'
+      'check:Check if updates for current modules are available'
+      'check-version:Check if a new version of zimfw is available'
+      'upgrade:Upgrade zimfw. Also does compile.'
+      'help:Print zimfw help'
+      '--help:Print zimfw help'
+      'version:Print zimfw version'
+      '--version:Print zimfw version'
+    )
+    _describe 'action' actions && ret=0
+    ;;
+  options)
+    local -a options
+    case ${line[1]} in
+      build|upgrade)
+        options=(
+          '-q:Quiet (only output errors)'
+          '-v:Verbose (also see compile output)'
+        )
+        ;;
+      clean*|compile)
+        options=(
+          '-q:Quiet (only output errors)'
+          '-v:Verbose (N/A)'
+        )
+        ;;
+      list)
+        options=(
+          '-q:Quiet (N/A)'
+          '-v:Verbose (also see module initialization details)'
+        )
+        ;;
+      init|install|update)
+        options=(
+          '-q:Quiet (only output errors)'
+          '-v:Verbose (also see build, compile output, any on-pull output and skipped modules)'
+        )
+        ;;
+      reinstall)
+        options=(
+          '-q:Quiet (yes to prompts and only output errors)'
+          '-v:Verbose (also see build, compile output, any on-pull output and skipped modules)'
+        )
+        ;;
+      uninstall)
+        options=(
+          '-q:Quiet (yes to prompts and only output errors)'
+          '-v:Verbose (N/A)'
+        )
+        ;;
+      check)
+        options=(
+          '-q:Quiet (only output errors)'
+          '-v:Verbose(also see skipped and up to date modules)'
+        )
+        ;;
+      check-version)
+        options=(
+          '-q:Quiet (only output errors)'
+          '-v:Verbose (output more details)'
+        )
+        ;;
+    esac
+    if (( ${#options} )); then
+      _describe 'option' options && ret=0
+    fi
+  ;;
+esac
+
+return ${ret}
