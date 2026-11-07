@@ -2,9 +2,7 @@
 # Completion enhancements
 #
 
-if [[ ${TERM} == dumb ]]; then
-  return 1
-fi
+[[ ${TERM} != dumb ]] || return 1
 
 if (( ${+_comps} )); then
   print -u2 'warning: completion was already initialized before completion module. Will call compinit again. See https://github.com/zimfw/zimfw/wiki/Troubleshooting#completion-is-not-working'
@@ -28,9 +26,7 @@ fi
     zmodload -F zsh/system b:sysread && sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat || return 1
     if [[ ${zold_dat} == ${znew_dat} ]] zdump_dat=0
   fi
-  if (( zdump_dat )); then
-    command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N) || return 1
-  fi
+  (( ! zdump_dat )) || command rm -f ${zdumpfile}(|.dat|.zwc(|.old))(N) || return 1
 
   # Load and initialize the completion system
   autoload -Uz compinit && compinit -C -d ${zdumpfile} && [[ -e ${zdumpfile} ]] || return 1
@@ -127,12 +123,12 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
 
 # Don't complete uninteresting users...
 zstyle ':completion:*:*:*:users' ignored-patterns \
-  '_*' adm amanda apache avahi beaglidx bin cacti canna clamav daemon dbus \
-  distcache dovecot fax ftp games gdm gkrellmd gopher hacluster haldaemon \
-  halt hsqldb ident junkbust ldap lp mail mailman mailnull mldonkey mysql \
-  nagios named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
-  operator pcap postfix postgres privoxy pulse pvm quagga radvd rpc rpcuser \
-  rpm shutdown squid sshd sync uucp vcsa xfs
+    '_*' adm amanda apache avahi beaglidx bin cacti canna clamav daemon dbus \
+    distcache dovecot fax ftp games gdm gkrellmd gopher hacluster haldaemon \
+    halt hsqldb ident junkbust ldap lp mail mailman mailnull mldonkey mysql \
+    nagios named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
+    operator pcap postfix postgres privoxy pulse pvm quagga radvd rpc rpcuser \
+    rpm shutdown squid sshd sync uucp vcsa xfs
 
 # ... unless we really want to.
 zstyle ':completion:*' single-ignored show
